@@ -35,20 +35,12 @@ def sec_process(driver):
 	element[0].click()
 	driver.refresh()
 
-	# list_of_selectors = ['#ModalWindowInner1 > div.box3 > div:nth-child(34)',
-	#                      '#ModalWindowInner1 > div.box3 > div:nth-child(35)',
-	#                      '#ModalWindowInner1 > div.box3 > div:nth-child(36)',
-	#                      '#ModalWindowInner1 > div.box3 > div:nth-child(37)',
-	#                      '#ModalWindowInner1 > div.box3 > div:nth-child(38)',
-	#                      '#ModalWindowInner1 > div.box3 > div:nth-child(39)',
-	#                      '#ModalWindowInner1 > div.box3 > div:nth-child(40)']
 	list_of_selectors = []
 	for i in range(34,41):
 		css_selector_link = '#ModalWindowInner1 > div.box3 > div:nth-child({})'.format(i)
-        list_of_selectors.append(css_selector_link)
-
+		list_of_selectors.append(css_selector_link)
 	s_1 = '#id1'
-	for i in range(len(list_of_selectors)-2):
+	for i in range(len(list_of_selectors)):
 		element = driver.find_elements_by_css_selector(s_1)
 		element[0].click()
 		driver.switch_to.window(driver.window_handles[0])
@@ -65,16 +57,31 @@ def sec_process(driver):
 	container_list = []
 	for container in soup.find_all('a', attrs={'class': 'inst'}):
 		container_list.append(container)
-	#
+	print(container_list[0])
 	return container_list
 	# return driver
 
+import re
 def Code_getter(code_list):
-	pass
+	names, id = [], []
+	i = 0
+	for m in code_list:
+		if i % 2 == 0:
+			y = re.findall(r'i=([0-9]*)', str(m))
+			x = re.findall(r'>(.*)</a>', str(m))
+			names.append(x[0])
+			id.append(y[0])
+		i += 1
+	return names,id
 
-
+import csv
+def import_to_csv(names,ids):
+	with open('tsestocknames.csv', 'w', encoding="utf-8", newline='') as f:
+		writer = csv.writer(f)
+		writer.writerows(zip(names, ids))
 
 url = url()
 g_driver = process_driver(url)
 g2_driver = sec_process(g_driver)
-#last_process(g2_driver)
+stock_names , ids = Code_getter(g2_driver)
+import_to_csv(stock_names,ids)
