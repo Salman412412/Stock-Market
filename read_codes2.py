@@ -15,8 +15,8 @@ def process_driver(url):
 	options = Options()
 	options.add_argument('--headless')
 	options.add_argument('--disable-gpu')
-	driver = webdriver.Chrome()
-	driver.implicitly_wait(100)
+	driver = webdriver.Chrome(options=options)
+	driver.implicitly_wait(10)
 	driver.get(url)
 	return driver
 
@@ -35,51 +35,20 @@ def sec_process(driver):
 	element[0].click()
 	driver.refresh()
 
+	# list_of_selectors = ['#ModalWindowInner1 > div.box3 > div:nth-child(34)',
+	#                      '#ModalWindowInner1 > div.box3 > div:nth-child(35)',
+	#                      '#ModalWindowInner1 > div.box3 > div:nth-child(36)',
+	#                      '#ModalWindowInner1 > div.box3 > div:nth-child(37)',
+	#                      '#ModalWindowInner1 > div.box3 > div:nth-child(38)',
+	#                      '#ModalWindowInner1 > div.box3 > div:nth-child(39)',
+	#                      '#ModalWindowInner1 > div.box3 > div:nth-child(40)']
+	list_of_selectors = []
+	for i in range(34,41):
+		css_selector_link = '#ModalWindowInner1 > div.box3 > div:nth-child({})'.format(i)
+        list_of_selectors.append(css_selector_link)
 
-	# print(s_3)
-	# elem = driver.find_elements_by_css_selector(s_3)
-	# print(elem)
-	# if elem:
-	# 	elem[0].click()
-	# 	driver.switch_to.window(driver.window_handles[0])
-	# else:
-	# 	print('hi')
-
-
-
-	# def find(driver):
-	# 	e = driver.find_element_by_id('#ModalWindowInner1 > div.box3 > div:nth-child(11)')
-	# 	return e
-	#
-	# elem = WebDriverWait(driver, 10).until(find)
-	# elem[0].click()
-
-
-
-	# mamad = driver.page_source
-	# print(driver)
-	#
-	#
-	#
-	# elem = driver.find_elements_by_css_selector('#ModalWindowInner1 > div > div.content > div > ul > li:nth-child(1) > a')
-	# if elem:
-	# 	for el in elem:
-	# 		print(el.text)
-	# else:
-	# 	print('hi')
-	# close_click = driver.find_elements_by_css_selector('#ModalWindowOuter1 > div.popup_close')[0].click()
-
-
-
-	list_of_selectors = ['#ModalWindowInner1 > div.box3 > div:nth-child(34)',
-	                     '#ModalWindowInner1 > div.box3 > div:nth-child(35)',
-	                     '#ModalWindowInner1 > div.box3 > div:nth-child(36)',
-	                     '#ModalWindowInner1 > div.box3 > div:nth-child(37)',
-	                     '#ModalWindowInner1 > div.box3 > div:nth-child(38)',
-	                     '#ModalWindowInner1 > div.box3 > div:nth-child(39)',
-	                     '#ModalWindowInner1 > div.box3 > div:nth-child(40)']
 	s_1 = '#id1'
-	for i in range(len(list_of_selectors)-4):
+	for i in range(len(list_of_selectors)-2):
 		element = driver.find_elements_by_css_selector(s_1)
 		element[0].click()
 		driver.switch_to.window(driver.window_handles[0])
@@ -91,23 +60,17 @@ def sec_process(driver):
 		driver.refresh()
 	time.sleep(3)
 	page = driver.page_source
-	print(page)
-	input('Hey you ! Fuck you ...')
 	driver.quit()
 	soup = BeautifulSoup(page, 'html.parser')
+	container_list = []
 	for container in soup.find_all('a', attrs={'class': 'inst'}):
-		print(container)
+		container_list.append(container)
 	#
-	return 1
+	return container_list
 	# return driver
 
-def last_process(driver):
-	page = driver.page_source
-	print(page)
-	driver.quit()
-	soup = BeautifulSoup(page, 'html.parser')
-	for container in soup.find_all('a', attrs={'class': 'inst'}):
-		print(container)
+def Code_getter(code_list):
+	pass
 
 
 
